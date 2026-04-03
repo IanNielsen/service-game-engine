@@ -1,0 +1,32 @@
+{
+  "endpoints": [
+    {
+      "endpoint": "POST /frig/add",
+      "request": {
+        "type": "object",
+        "properties": {
+          "frig": { "type": "string" }
+        },
+        "required": ["frig"]
+      },
+      "response": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["ok", "fail"] }
+        },
+        "required": ["status"]
+      }
+    },
+    {
+      "endpoint": "GET /frig/clear",
+      "request": null,
+      "response": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["ok", "fail"] }
+        },
+        "required": ["status"]
+      }
+    }
+  ]
+}

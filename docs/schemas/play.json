@@ -1,0 +1,94 @@
+{
+  "endpoint": "POST /play",
+  "request": {
+    "type": "object",
+    "properties": {
+      "sessionId": { "type": "string" },
+      "stake": { "type": "number" }
+    },
+    "required": ["sessionId", "stake"]
+  },
+  "response": {
+    "oneOf": [
+      {
+        "title": "PlayResponse",
+        "type": "object",
+        "properties": {
+          "sessionId": { "type": "string" },
+          "balance": { "type": "number" },
+          "roundDetails": {
+            "type": "object",
+            "properties": {
+              "resolved": { "type": "boolean" },
+              "gameState": {
+                "type": "object",
+                "properties": {
+                  "reelPositions": {
+                    "type": "array",
+                    "items": { "type": "number" }
+                  },
+                  "reelWindow": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "awards": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "name": { "type": "string", "enum": ["winlines"] },
+                            "payout": { "type": "number" },
+                            "lines": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "index": { "type": "number" },
+                                  "winline": { "type": "array", "items": { "type": "number" } },
+                                  "symbols": { "type": "array", "items": { "type": "string" } },
+                                  "payout": { "type": "number" }
+                                },
+                                "required": ["index", "winline", "symbols", "payout"]
+                              }
+                            }
+                          },
+                          "required": ["name", "payout", "lines"]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "name": { "type": "string", "enum": ["fullHouseDouble"] },
+                            "payout": { "type": "number" }
+                          },
+                          "required": ["name", "payout"]
+                        }
+                      ]
+                    }
+                  },
+                  "totalWin": { "type": "number" }
+                },
+                "required": ["reelPositions", "reelWindow", "awards", "totalWin"]
+              },
+              "payout": {
+                "type": "object",
+                "properties": {
+                  "stake": { "type": "number" },
+                  "payout": { "type": "number" }
+                },
+                "required": ["stake", "payout"]
+              }
+            },
+            "required": ["resolved", "gameState", "payout"]
+          }
+        },
+        "required": ["sessionId", "balance", "roundDetails"]
+      },
+      { "$ref": "./error.json#/definitions/ErrorResponse" }
+    ]
+  }
+}
